@@ -1,0 +1,82 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Google Form Live Responses</title>
+  <meta name="description" content="Google Form Live Responses">
+  <meta name="fahad israr" content="fahad-israr.github.io">
+
+  <link rel="stylesheet" href="">
+
+</head>
+
+<body>
+  <script >
+    var csvUrl = 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vTNskT1asxemFTuMPlMGNKLcAatRZP42L3pis3C-folUiW8lueB4eakiSSE1WTHLkaT5KYAivZ6Ref2/pub?output=csv';
+
+    // Init Ajax Object
+    var ajax = new XMLHttpRequest();
+
+    // Set a GET request to the URL which points to your CSV file
+    ajax.open('GET', csvUrl);
+
+    // Set the action that will take place once the browser receives your CSV
+    ajax.onreadystatechange = function() {
+        if(ajax.readyState === XMLHttpRequest.DONE && ajax.status === 200) {
+            // Request was successful
+            var csvData = ajax.responseText;
+            console.log(csvData);
+            var csvString=csvData;
+            var dataArea = document.querySelector('#csv_data');
+            
+            // Split csv to rows
+            var rows = csvString.split('\n');
+            
+            var htmlStr = '';
+            
+            // Iterate over each row
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                
+                // split row to cells
+                var cells = row.split(',');
+                
+                // Extract data from cell 1 and 2 of current row
+                //var companyName = cells[0];
+                //var stockPrice = cells[1];
+                htmlStr+='<tr>';
+                cells.forEach(item=>{
+                htmlStr += '<td>'+item+'</td>'; 
+                });
+                // Add extracted CSV data to string
+                //htmlStr += '<p>Quote for ' + companyName + ': ' + stockPrice + '</p><br>';
+                htmlStr+='</tr>'
+            }
+            
+            // Set the string generated from CSV as HTML of the dedicated div
+            dataArea.innerHTML = htmlStr;
+
+                        // Do something with that data here
+
+                    }
+                }
+
+                // Send request
+                ajax.send();
+
+  </script>
+    <h1>Demo For Fetching Data from Spreadsheet</h1>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSd5KTNyureUPbj2PdC4vmMWDQ0BbJZWazPJ5S4r_BqTGkREyA/viewform?usp=sf_link">Original Form Link </a>
+    <br/>
+    <a href="https://docs.google.com/spreadsheets/d/13SCv6rtpke6Il7yk1iGNNK2QtdflLOq59I99i2-60OY/edit?usp=sharing">Generated Sheet Link </a>
+    <h2>Fetching CSV...</h2>
+    <table id="csv_data">
+
+    </table>
+
+
+
+</body>
+</html>
